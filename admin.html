@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Админ-панель</title>
+    <style>
+        :root {
+            --bg: #faf9f6;
+            --card-bg: #ffffff;
+            --text: #1a1a1a;
+            --accent: #d4a373;
+            --border: #eeeeee;
+        }
+        [data-theme="dark"] {
+            --bg: #121212;
+            --card-bg: #1e1e1e;
+            --text: #f0f0f0;
+            --accent: #e5b38a;
+            --border: #333333;
+        }
+        body { font-family: sans-serif; background: var(--bg); color: var(--text); padding: 40px; transition: 0.3s; }
+        .admin-box { max-width: 600px; margin: auto; background: var(--card-bg); padding: 30px; border: 1px solid var(--border); border-radius: 6px; }
+        input, textarea { width: 100%; padding: 10px; margin: 8px 0; border: 1px solid var(--border); background: var(--bg); color: var(--text); box-sizing: border-box; }
+        button { width: 100%; padding: 12px; background: var(--accent); color: white; border: none; cursor: pointer; font-weight: bold; border-radius: 4px; }
+        .order-card { background: var(--bg); padding: 15px; margin-top: 15px; border: 1px solid var(--border); border-radius: 4px; }
+        a { color: var(--accent); text-decoration: none; }
+    </style>
+</head>
+<body>
+    <div class="admin-box">
+        <h2>Добавить новый десерт</h2>
+        <form action="/admin/add" method="POST">
+            <input type="text" name="name" placeholder="Название" required>
+            <input type="number" name="price" placeholder="Цена в комах" required>
+            <input type="text" name="img" placeholder="Ссылка на картинку (URL)" required>
+            <textarea name="desc" placeholder="Описание товара" rows="3"></textarea>
+            <button type="submit">Добавить в каталог</button>
+        </form>
+
+        <h2 style="margin-top: 40px;">Поступившие заказы</h2>
+        {% if orders %}
+            {% for order in orders %}
+            <div class="order-card">
+                <p><strong>Заказ №{{ order.id }}</strong></p>
+                <p>Клиент: {{ order.customer_name }} (Тел: {{ order.phone }})</p>
+                <p>Товары: {{ order.items }}</p>
+                <p style="color: var(--accent);">Сумма: {{ order.total_price }} KGS</p>
+            </div>
+            {% endfor %}
+        {% else %}
+            <p>Заказов пока нет.</p>
+        {% endif %}
+
+        <p style="text-align: center; margin-top: 25px;"><a href="/">← Вернуться на главную</a></p>
+    </div>
+
+    <script>
+        const currentTheme = localStorage.getItem('theme');
+        if (currentTheme) {
+            document.documentElement.setAttribute('data-theme', currentTheme);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Премиальная Пекарня</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Цвета для светлой темы по умолчанию */
+        :root {
+            --bg: #faf9f6;
+            --card-bg: #ffffff;
+            --text: #1a1a1a;
+            --accent: #d4a373;
+            --nav-bg: #ffffff;
+            --border: #eeeeee;
+        }
+
+        /* Цвета для темной темы */
+        [data-theme="dark"] {
+            --bg: #121212;
+            --card-bg: #1e1e1e;
+            --text: #f0f0f0;
+            --accent: #e5b38a;
+            --nav-bg: #181818;
+            --border: #333333;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            margin: 0;
+            background: var(--bg);
+            color: var(--text);
+            transition: background 0.3s, color 0.3s;
+        }
+
+        nav {
+            padding: 20px 8%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--nav-bg);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo { font-size: 1.3rem; font-weight: bold; }
+        .nav-links a { text-decoration: none; color: var(--text); margin-left: 20px; font-weight: bold; }
+
+        .theme-btn {
+            background: none;
+            border: 1px solid var(--accent);
+            color: var(--text);
+            cursor: pointer;
+            padding: 5px 12px;
+            margin-left: 15px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+
+        .catalog { padding: 50px 8%; display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 30px; }
+        .card { background: var(--card-bg); padding: 20px; border: 1px solid var(--border); text-align: center; border-radius: 6px; }
+        .card img { width: 100%; height: 220px; object-fit: cover; border-radius: 4px; }
+        .price { color: var(--accent); font-weight: bold; font-size: 1.2rem; margin: 10px 0; }
+
+        .btn { display: inline-block; padding: 12px 24px; background: #27ae60; color: white; text-decoration: none; font-weight: bold; border-radius: 4px; margin-top: 10px; }
+        .btn:hover { background: #219653; }
+        .delete-btn { display: block; margin-top: 12px; color: #ff4d4d; text-decoration: none; font-size: 0.8rem; }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo">BAKERY BISHKEK</div>
+        <div class="nav-links">
+            <a href="/">Главная</a>
+            <a href="/cart">🛒 Корзина ({{ cart_count }})</a>
+            <a href="/admin">Админка</a>
+            <button class="theme-btn" id="theme-toggle"> Тема</button>
+        </div>
+    </nav>
+
+    <div class="catalog">
+        {% for item in products %}
+        <div class="card">
+            <img src="{{ item.img }}" alt="{{ item.name }}">
+            <h3>{{ item.name }}</h3>
+            <div class="price">{{ item.price }} KGS</div>
+            <p style="font-size: 0.85rem; opacity: 0.8; min-height: 40px;">{{ item.desc }}</p>
+
+            <a href="/add_to_cart/{{ item.id }}" class="btn">В корзину</a>
+            <a href="/delete/{{ item.id }}" class="delete-btn">Удалить ×</a>
+        </div>
+        {% endfor %}
+    </div>
+
+    <script>
+        const toggleBtn = document.getElementById('theme-toggle');
+        const currentTheme = localStorage.getItem('theme');
+
+        // Проверяем сохраненную тему
+        if (currentTheme) {
+            document.documentElement.setAttribute('data-theme', currentTheme);
+        }
+
+        toggleBtn.addEventListener('click', () => {
+            let theme = document.documentElement.getAttribute('data-theme');
+            if (theme === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'light');
+                localStorage.setItem('theme', 'light');
+            } else {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                localStorage.setItem('theme', 'dark');
+            }
+        });
+    </script>
+</body>
+</html>

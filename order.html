@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Оформить заказ</title>
+    <style>
+        body { font-family: sans-serif; background: #faf9f6; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .box { background: white; padding: 40px; border-radius: 4px; box-shadow: 15px 15px 0 #d4a373; width: 320px; text-align: center; }
+        input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #eee; box-sizing: border-box; }
+        .btn { width: 100%; padding: 15px; background: #1a1a1a; color: white; border: none; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <h3>Заказ: {{ item_name }}</h3>
+        <form action="/success" method="POST">
+            <input type="text" name="name" placeholder="Ваше имя" required>
+            <input type="tel" name="phone" placeholder="Ваш телефон" required>
+            <button type="submit" class="btn">ОТПРАВИТЬ</button>
+        </form>
+    </div>
+</body>
+</html>

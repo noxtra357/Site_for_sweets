@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Корзина</title>
+    <style>
+        :root {
+            --bg: #faf9f6;
+            --card-bg: #ffffff;
+            --text: #1a1a1a;
+            --accent: #d4a373;
+            --border: #eeeeee;
+        }
+        [data-theme="dark"] {
+            --bg: #121212;
+            --card-bg: #1e1e1e;
+            --text: #f0f0f0;
+            --accent: #e5b38a;
+            --border: #333333;
+        }
+        body { font-family: sans-serif; background: var(--bg); color: var(--text); padding: 50px; transition: 0.3s; }
+        .cart-box { max-width: 500px; margin: auto; background: var(--card-bg); padding: 30px; border: 1px solid var(--border); border-radius: 6px; }
+        .item { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--border); }
+        input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid var(--border); background: var(--bg); color: var(--text); box-sizing: border-box; }
+        .order-btn { width: 100%; padding: 15px; background: var(--text); color: var(--card-bg); border: none; font-weight: bold; cursor: pointer; border-radius: 4px; }
+        a { color: var(--accent); text-decoration: none; }
+    </style>
+</head>
+<body>
+    <div class="cart-box">
+        <h2>Ваша корзина</h2>
+        {% if cart %}
+            {% for id, details in cart.items() %}
+            <div class="item">
+                <span>{{ details.name }} (x{{ details.quantity }})</span>
+                <span>{{ details.price * details.quantity }} KGS</span>
+            </div>
+            {% endfor %}
+            <h3 style="text-align: right; color: var(--accent);">Итого: {{ total }} KGS</h3>
+
+            <form action="/checkout" method="POST">
+                <input type="text" name="name" placeholder="Ваше имя" required>
+                <input type="tel" name="phone" placeholder="Ваш номер телефона" required>
+                <button type="submit" class="order-btn">ОТПРАВИТЬ ЗАКАЗ</button>
+            </form>
+            <p style="text-align: center; margin-top: 20px;"><a href="/clear_cart" style="color:#ff4d4d;">Очистить корзину</a></p>
+        {% else %}
+            <p>Корзина пока пуста. <a href="/">Вернуться к покупкам</a></p>
+        {% endif %}
+    </div>
+
+    <script>
+        const currentTheme = localStorage.getItem('theme');
+        if (currentTheme) {
+            document.documentElement.setAttribute('data-theme', currentTheme);
+        }
+    </script>
+</body>
+</html>
